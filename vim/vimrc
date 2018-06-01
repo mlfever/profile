@@ -1,0 +1,638 @@
+"       Amir Salihefendic
+"       http://amix.dk - amix@amix.dk
+"
+" Version: 
+"       5.0 - 29/05/12 15:43:36
+"
+" Blog_post: 
+"       http://amix.dk/blog/post/19691#The-ultimate-Vim-configuration-on-Github
+"
+" Awesome_version:
+"       Get this config, nice color schemes and lots of plugins!
+"
+"       Install the awesome version from:
+"
+"           https://github.com/amix/vimrc
+"
+" Syntax_highlighted:
+"       http://amix.dk/vim/vimrc.html
+"
+" Raw_version: 
+"       http://amix.dk/vim/vimrc.txt
+"
+" Sections:
+"    -> General
+"    -> VIM user interface
+"    -> Colors and Fonts
+"    -> Files and backups
+"    -> Text, tab and indent related
+"    -> Visual mode related
+"    -> Moving around, tabs and buffers
+"    -> Status line
+"    -> Editing mappings
+"    -> vimgrep searching and cope displaying
+"    -> Spell checking
+"    -> Misc
+"    -> Helper functions
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sets how many lines of history VIM has to remember
+set history=700
+
+" set mouse on
+"set mouse=v
+
+"execute project relate config in current dir"
+if filereadable("workspace.vim")
+    source workspace.vim
+endif
+
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
+
+" Fast saving
+nmap <leader>w :w!<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => VIM user interface
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set 7 lines to the cursor - when moving vertically using j/k
+set so=7
+
+" Turn on the WiLd menu
+set wildmenu
+
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+
+"Always show current position
+set ruler
+
+" Height of the command bar
+set cmdheight=2
+
+" A buffer becomes hidden when it is abandoned
+set hid
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Ignore case when searching
+set ignorecase
+
+" When searching try to be smart about cases 
+set smartcase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" For regular expressions turn magic on
+set magic
+
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable syntax highlighting
+syntax enable
+syntax on
+
+colorscheme desert
+set background=dark
+
+" Set extra options when running in GUI mode
+if has("gui_running")
+    set guioptions-=T
+    set guioptions+=e
+    set t_Co=256
+    set guitablabel=%M\ %t
+endif
+
+" Set utf8 as standard encoding and en_US as the standard language
+"set encoding=utf8
+"change chinese encoding
+set encoding=UTF-8
+"set langmenu=zh_CN.UTF-8 
+"language message zh_CN.UTF-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,bing5,euc-jp,euc-kr,latin1
+set tabstop=4
+set backspace=2
+filetype plugin indent on
+" show existing tab with 4 spaces width
+" set tabstop=4
+" " when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" " On pressing tab, insert 4 spaces
+set expandtab
+set smarttab
+
+"show tab
+"set list
+"set listchars=tab:.\ ,trail:·
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Files, backups and undo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Turn backup off, since most stuff is in SVN, git et.c anyway...
+set nobackup
+set nowb
+set noswapfile
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use spaces instead of tabs
+set expandtab
+
+" Be smart when using tabs ;)
+set smarttab
+
+" 1 tab == 4 spaces
+set shiftwidth=4
+set tabstop=4
+
+" Linebreak on 500 characters
+set lbr
+set tw=500
+
+set ai "Auto indent
+set si "Smart indent
+set wrap "Wrap lines
+
+
+""""""""""""""""""""""""""""""
+" => Visual mode related
+""""""""""""""""""""""""""""""
+" Visual mode pressing * or # searches for the current selection
+" Super useful! From an idea by Michael Naumann
+vnoremap <silent> * :call VisualSelection('f')<CR>
+vnoremap <silent> # :call VisualSelection('b')<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Moving around, tabs, windows and buffers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Treat long lines as break lines (useful when moving around in them)
+map j gj
+map k gk
+
+" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+map <space> /
+"map <c-space> ?
+
+" Disable highlight when <leader><cr> is pressed
+map <silent> <leader><cr> :noh<cr>
+
+" Smart way to move between windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Close the current buffer
+map <leader>bd :Bclose<cr>
+
+" Close all the buffers
+map <leader>ba :1,1000 bd!<cr>
+
+" Useful mappings for managing tabs
+map <leader>tn :tabnext<cr>
+map <leader>tp :tabprevious<cr>
+map <leader>tf :tabfirst<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+
+" Switch CWD to the directory of the open buffer
+map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Specify the behavior when switching between buffers 
+try
+  set switchbuf=useopen,usetab,newtab
+  set stal=2
+catch
+endtry
+
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+" Remember info about open buffers on close
+set viminfo^=%
+
+
+""""""""""""""""""""""""""""""
+" => Status line
+""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
+
+" Format the status line
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Editing mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Remap VIM 0 to first non-blank character
+map 0 ^
+
+" Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
+nmap <M-j> mz:m+<cr>`z
+nmap <M-k> mz:m-2<cr>`z
+vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+if has("mac") || has("macunix")
+  nmap <D-j> <M-j>
+  nmap <D-k> <M-k>
+  vmap <D-j> <M-j>
+  vmap <D-k> <M-k>
+endif
+
+" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.coffee :call DeleteTrailingWS()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vimgrep searching and cope displaying
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" When you press gv you vimgrep after the selected text
+vnoremap <silent> gv :call VisualSelection('gv')<CR>
+
+" Open vimgrep and put the cursor in the right position
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+
+" Vimgreps in the current file
+map <leader><space> :vimgrep // <C-R>%<C-A><right><right><right><right><right><right><right><right><right>
+
+" When you press <leader>r you can search and replace the selected text
+vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
+
+" Do :help cope if you are unsure what cope is. It's super useful!
+"
+" When you search with vimgrep, display your results in cope by doing:
+"   <leader>cc
+"
+" To go to the next search result do:
+"   <leader>n
+"
+" To go to the previous search results do:
+"   <leader>p
+"
+map <leader>cc :botright cope<cr>
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+
+" Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Misc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+" Quickly open a buffer for scripbble
+map <leader>q :e ~/buffer<cr>
+
+" Toggle paste mode on and off
+map <leader>pp :setlocal paste!<cr>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+function! VisualSelection(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+
+" Returns true if paste mode is enabled
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Tag list(ctags)
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+"if MySys() == "windows"
+"   let Tlist_Ctags_Cmd = "ctags"a
+"elseif MySys() == "linux"
+let Tlist_Ctags_Cmd = "~/code/ctags-5.8/ctags"
+"endif
+set tags=tags;
+set autochdir
+
+let Tlist_Show_One_File = 1
+let Tlist_Exit_OnlyWindow = 1
+"let Tlist_Use_Right_Window = 1
+"let Tlist_Auto_Open = 1
+"let Tlist_GainFocus_On_ToggleOpen = 1
+
+""""""""""""""""""""""""""""""""""i"""""""""""
+" netrw setting
+""""""""""""""""""""""""""""""""""""""""""
+let g:netrw_winsize = 30
+let g:netrw_liststyle = 1
+let g:netrw_timefmt = '%Y - %m - %d %H:%M:%S'
+nmap <silent> <F2> :Sexplore!<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""
+" winManager setting
+"""""""""""""""""""""""""""""""""""""""""""
+"let g:winManagerWindowLayout = 'FileExplorer|TagList'
+"let g:winManagerWidth = 30
+"let g:defaultExplorer = 0
+"nmap wm :WMToggle<cr>
+
+"for mouse 
+"set mouse=a
+
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [CODE=%{&fileencoding}]\ [TYPE=%Y]\ [POS=(%l,%v)]\ [%p%%
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 设置vim编码格式
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set fileencoding=cp936        " 新建文件的编码方式(缓冲编码格式)
+let &termencoding=&encoding   " 终端的编码和GUI一样
+set fileencodings=utf8,cp936,gb2312,gbk,gb18030,ucs-bom,latin1    " 文件编码自动控制
+
+set shortmess=at
+
+set laststatus=2           "状态栏一直显示"
+
+set nu!
+
+let g:miniBufExplMapCTabSwitchBufs=1
+let g:miniBufExplMapWindowsNavVim=1
+let g:miniBufExplMapWindowNavArrows=1
+
+"NERDTree快捷键
+map <F2> :NERDTree  <CR>
+"" NERDTree.vim
+let g:NERDTreeWinPos="left"
+let g:NERDTreeWinSize=25
+let g:NERDTreeShowLineNumbers=1
+let g:neocomplcache_enable_at_startup = 1 
+
+if filereadable("workspace.vim")
+    source workspace.vim
+endif
+
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+
+
+    
+
+"cscope常用快捷键：
+"先按 ctrl+\ 然后
+"c: 查找该函数被调用的位置
+"d: 查找该函数调用了哪些函数
+"e: 查找指定的正规表达式 
+"f: 查找指定的文件
+"g: 查找指定标识符的定义位置
+"i: 查找该文件在哪些地方被包含
+"s: 查找指定标识符的使用位置
+"t: 查找指定的文本字符串
+"
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+let Tlist_Show_One_File = 1 "不同时显示多个文件的tag，只显示当前文件的
+let Tlist_Exit_OnlyWindow = 1 "如果taglist窗口是最后一个窗口，则退出vim
+"let Tlist_Use_Right_Window = 1 "在右侧窗口中显示taglist窗口
+
+"保存文件时自动更新ctags
+"au BufWritePost *.c,*.cpp,*.h silent! !ctags -R &
+
+"bundle 插件管理
+set nocompatible " be iMproved
+filetype off " required!
+set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#rc()
+
+" 自动补齐括号。
+"":inoremap ( ()<ESC>i
+"":inoremap ) <c-r>=ClosePair(')')<CR>
+"":inoremap { {<CR>}<ESC>O
+"":inoremap } <c-r>=ClosePair('}')<CR>
+"":inoremap [ []<ESC>i
+"":inoremap ] <c-r>=ClosePair(']')<CR>
+"":inoremap " ""<ESC>i
+"":inoremap ' ''<ESC>i
+
+
+function ClosePair(char)
+  if getline('.')[col('.') - 1] == a:char
+      return "/<Right>"
+  else
+      return a:char
+  endif
+endfunction
+
+" 使用Vundle来管理Vundle，这个必须要有。
+Bundle 'gmarik/vundle'
+"接下来是要安装的插件
+"格式1：Github上其他用户的仓库（非vim-scripts账户里的仓库，所以要加Github用户名）
+"Bundle 'tpope/vim-fugitive'
+"Bundle 'tpope/vim-rails.git'
+"格式2：vim-scripts里面的仓库，直接打仓库名即可。
+"Bundle 'L9'
+"Bundle 'FuzzyFinder'
+"格式3：非Github的Git仓库
+"Bundle 'git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex'
+
+"/usr/share/vim/vim73/plugin/
+"getscriptPlugin.vim
+"netrwPlugin.vim  
+"spellfile.vim  
+"vimballPlugin.vim
+"gzip.vim                    
+"tarPlugin.vim  
+"zipPlugin.vim
+"matchparen.vim       
+"rrhelper.vim     
+"tohtml.vim
+
+Bundle 'taglist.vim'
+Bundle 'scrooloose/nerdtree'
+"Bundle 'cvsmenu.vim'
+"Bundle 'word_complete.vim'
+"Bundle 'mbriggs/mark.vim'
+"Bundle 'SearchComplete'
+"Bundle 'matrix'
+"Bundle 'TeTrIs.vim'
+Bundle 'a.vim'
+"Bundle 'echofunc.vim'
+Bundle 'tyru/fencview.vim'
+Bundle 'nathanalderson/yang.vim'
+Bundle 'tpope/vim-fugitive'
+"Bundle 'will133/vim-dirdiff.vim'
+"Bundle 'Yggdroot/LeaderF'
+Bundle 'ctrlpvim/ctrlp.vim'
+
+filetype plugin indent on 
+
+
+"if filereadable("cscope.out")
+"    cs add cscope.out
+"endif
+
+
+"auto add cscope/
+if has("cscope")
+    set csprg=/usr/bin/cscope
+    set csto=1
+    set cst
+    set csverb
+    set cspc=3
+    "add any database in current dir
+    if filereadable("cscope.out")
+        cs add cscope.out
+    "if cscope.out exist in ../
+    "elseif filereadable("../cscope.out")
+    "    cs add ../cscope.out ../
+    "else search cscope.out elsewhere
+    else
+        let cscope_file=findfile("cscope.out", ".;")
+        let cscope_pre=matchstr(cscope_file, ".*/")
+        echo cscope_file
+        if !empty(cscope_file) && filereadable(cscope_file)
+            exe "cs add" cscope_file cscope_pre
+        endif
+    endif
+endif
+
+" quick fix windows
+":copen " Open the quickfix window
+":ccl   " Close it
+":cw    " Open it if there are "errors", close it otherwise (some people prefer this)
+":cn    " Go to the next error in the window
+":cnf   " Go to the first error in the next file
+
+
+" Tlist
+map <leader>tl :Tlist<cr>
+
+
+if &diff
+    syntax off
+    windo wincmd K
+endif
